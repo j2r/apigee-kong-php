@@ -1,0 +1,8 @@
+username: "<USERNAME>"
+password: "<PASSWORD>"
+organization: "<ORGANIZATION NAME>"
+url: "https://api.enterprise.apigee.com/"
+proxyList: "v1/organizations/{organization}/apis"
+proxyRevision: "v1/organizations/{organization}/apis/{proxy}/revisions"
+proxyDownload: "v1/organizations/{organization}/apis/{proxy}/revisions/{revisionNumber}"
+appList: "v1/organizations/{organization}/apps"

@@ -1,0 +1,12 @@
+{
+  "autoload": {
+	"psr-4": {
+      "ApigeeKongUtil\\": "Util/"
+    }
+  },
+  "require": {
+	"guzzlehttp/guzzle": "~6.0@dev",
+    "symfony/yaml": "^5.0",
+    "symfony/http-client": "^5.0"
+  }
+}
