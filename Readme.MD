@@ -10,6 +10,8 @@ Note : These scripts are to kick start the migration and this should run on loca
   
   - Make a copy of `config/default.kong.yml` to `config/kong.yml`. Provide Kong credentials in `config/kong.yml` file.
   
+  - Create directory 'proxyData' under the data directory and confirm the write permission.
+
   - Go to `src` directory and run `php migrate.php`.
   
 #Process

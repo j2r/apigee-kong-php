@@ -19,15 +19,20 @@ class KongRoute extends KongBase {
         $kongPlugin = new KongPlugin();
         $apigeeProxies = $apigee->getapigeeProxiesDownload();
         foreach ($apigeeProxies as $proxy => $path) {
+
             $proxyName = str_replace('%20', ' ', $proxy);
             $basexml = $this->file->getXMLData($path . "/$proxyName.xml");
+
             if (empty($basexml['TargetEndpoints']['TargetEndpoint'])) {
+                echo "Proxy : " . $proxyName . " can not be migrated as Target Endpoint is not available." . PHP_EOL;
                 continue;
+
             }
 
             $target = $basexml['TargetEndpoints']['TargetEndpoint'] . '.xml';
             $targetxml = $this->file->getXMLData("$path/targets/$target");
             if (empty($targetxml['HTTPTargetConnection']['URL'])) {
+                echo "Proxy : " . $proxyName . " can not be migrated as HTTP Target Connection URL is not available." . PHP_EOL;
                 continue;
             }
 
@@ -48,18 +53,20 @@ class KongRoute extends KongBase {
 
             // Not to process Plugins if Services or Routes are empty or having an error.
             if (empty($routeResult) || empty($serviceResult)) {
+                echo "Proxy : " . $proxyName . " can not be migrated. Check error logs for more details." . PHP_EOL;
                 continue;
             }
             $routePoliciesUrl = $this->kongConfig['url'] . 'routes/' .$routeResult['id'] . '/plugins';
 
             // @todo : need to enhance the Policy migration to postflow and target.
-            foreach ($proxyxml['PreFlow']['Request']['Step'] as $policy) {
-                $policyName = $policy['Name'];
-                $policyData = $this->file->getXMLData("$path/policies/$policyName.xml");
-                $policyProcessor = 'processPolicy' . $policyData['name'];
-                var_dump(method_exists($kongPlugin, $policyProcessor));
-                if (method_exists($kongPlugin, $policyProcessor)) {
-                    $return =  $kongPlugin->$policyProcessor($policyData, $routeResult, $routePoliciesUrl);
+            if (isset($proxyxml['PreFlow'])) {
+                foreach ($proxyxml['PreFlow']['Request']['Step'] as $policy) {
+                    $policyName = $policy['Name'];
+                    $policyData = $this->file->getXMLData("$path/policies/$policyName.xml");
+                    $policyProcessor = 'processPolicy' . $policyData['name'];
+                    if (method_exists($kongPlugin, $policyProcessor)) {
+                        $return =  $kongPlugin->$policyProcessor($policyData, $routeResult, $routePoliciesUrl);
+                    }
                 }
             }
             // @todo - Implement target prefix and suffix plugins

@@ -45,6 +45,6 @@ $appDevData = $apigeeAppDev->getAppDev();
 $kongConsumer = new KongConsumer();
 $consumers = $kongConsumer->migrateConsumer($appDevData);
 foreach ($consumers as $consumer) {
-    echo $consumer . " has been migrated" . PHP_EOL;
+    echo "Consumer : " . $consumer . " has been migrated" . PHP_EOL;
 }
 

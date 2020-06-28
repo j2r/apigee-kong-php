@@ -14,15 +14,11 @@ class KongConsumer extends KongBase {
         $kongConsumerUrl = $this->kongConfig['url'] . 'consumers';
         foreach ($apps as $app) {
             $consumer = $this->processAppData($app);
-            echo "<pre>";print_r($consumer);
             $consumerData = $this->http->postData($kongConsumerUrl, $consumer['data']);
-            echo "<pre>";print_r($consumerData);
             // If consumer is not created skip the key passing.
-            echo "++++";
             if (!is_array($consumerData)) continue;
-            echo "---";
 
-            if (!empty($consumer['data']['username'];)) {
+            if (!empty($consumer['data']['username'])) {
                 $consumers[] = $consumer['data']['username'];
             }
             foreach ($consumer['keys'] as $key) {
